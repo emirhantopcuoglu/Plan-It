@@ -1,7 +1,14 @@
+using Microsoft.EntityFrameworkCore;
+using Plan_It.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<PlanContext>(options => {
+    options.UseSqlite(builder.Configuration["ConnectionStrings:DefaultConnection"]);
+});
 
 var app = builder.Build();
 
