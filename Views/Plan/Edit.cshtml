@@ -1,0 +1,20 @@
+@model Plan
+
+<h2>Plan güncelle</h2>
+<hr>
+<form asp-controller="Plan" asp-action="Edit" method="post">
+    <input type="hidden" asp-for="PlanId">   
+    
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label">Başlık</label>
+        <input asp-for="Title" class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Deadline" class="form-label">Son Tarih</label>
+        <input asp-for="Deadline" class="form-control">
+    </div>
+
+    <button type="submit" class="btn btn-secondary">Kaydet</button>
+
+</form>
