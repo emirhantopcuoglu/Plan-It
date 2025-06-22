@@ -14,7 +14,8 @@ namespace Plan_It.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(_planRepository.GetAllPlans());
+            var plan = await _planRepository.GetAllPlans();
+            return View(plan);
         }
 
         [HttpGet]
@@ -65,11 +66,47 @@ namespace Plan_It.Controllers
             return View(plan);
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
+            var plan = await _planRepository.GetById(id);
+            if (plan == null)
+            {
+                return NotFound();
+            }
+
+            return View(plan);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var plan = await _planRepository.GetById(id);
+
+            if (plan == null)
+            {
+                return NotFound();
+            }
+
             await _planRepository.DeletePlan(id);
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateCompletionStatus(int id, bool isCompleted)
+        {
+            var plan = await _planRepository.GetById(id);
+            if (plan == null)
+            {
+                return NotFound();
+            }
+
+            plan.IsCompleted = isCompleted;
+            await _planRepository.UpdatePlan(plan);
+
+            return Json(new { success = true });
+        }
+
+
     }
 }
