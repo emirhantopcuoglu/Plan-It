@@ -11,8 +11,8 @@ using Plan_It.Data;
 namespace Plan_It.Migrations
 {
     [DbContext(typeof(PlanContext))]
-    [Migration("20250622112313_AddCategoryModel")]
-    partial class AddCategoryModel
+    [Migration("20250622134437_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,7 +22,7 @@ namespace Plan_It.Migrations
 
             modelBuilder.Entity("Plan_It.Models.Category", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CategoryId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -30,7 +30,7 @@ namespace Plan_It.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                    b.HasKey("CategoryId");
 
                     b.ToTable("Categories");
                 });

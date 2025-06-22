@@ -1,9 +1,12 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Plan_It.Models
 {
     public class Category
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public ICollection<Plan> Plans { get; set; }
+        [Key]
+        public int CategoryId { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public ICollection<Plan> Plans { get; set; } = new List<Plan>();
     }
 }

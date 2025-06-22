@@ -1,18 +1,25 @@
 @model Plan
-<h1>Yeni bir plan ekle</h1>
 
+<h1>Yeni bir plan ekle</h1>
 <hr>
+
 <form asp-controller="Plan" asp-action="Create" method="post">
     <div class="mb-3">
         <label asp-for="Title" class="form-label">Başlık</label>
-        <input asp-for="Title" class="form-control">
+        <input asp-for="Title" class="form-control" />
     </div>
 
     <div class="mb-3">
         <label asp-for="Deadline" class="form-label">Son Tarih</label>
-        <input asp-for="Deadline" class="form-control">
+        <input asp-for="Deadline" class="form-control" type="date" />
     </div>
-    
-    <button type="submit" class="btn btn-secondary">Kaydet</button>
 
+    <div class="mb-3">
+        <label asp-for="CategoryId" class="form-label">Kategori</label>
+        <select asp-for="CategoryId" class="form-select" asp-items="ViewBag.Categories">
+            <option value="">-- Kategori Seçiniz --</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-secondary">Kaydet</button>
 </form>

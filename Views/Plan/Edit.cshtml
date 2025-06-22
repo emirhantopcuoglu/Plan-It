@@ -14,7 +14,13 @@
         <label asp-for="Deadline" class="form-label">Son Tarih</label>
         <input asp-for="Deadline" class="form-control">
     </div>
-
+    
+    <div class="mb-3">
+        <label asp-for="CategoryId" class="form-label">Kategori</label>
+        <select asp-for="CategoryId" class="form-select" asp-items="ViewBag.Categories">
+            <option value="">-- Kategori Seçiniz --</option>
+        </select>
+    </div>
     <button type="submit" class="btn btn-secondary">Kaydet</button>
 
 </form>

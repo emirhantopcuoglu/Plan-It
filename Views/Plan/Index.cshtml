@@ -15,6 +15,7 @@
                     <th scope="col">Oluşturulma Tarihi</th>
                     <th scope="col">Son Tarih</th>
                     <th scope="col">Durum</th>
+                    <th scope="col">Kategori</th>
                     <th scope="col">Eylemler</th>
                 </tr>
             </thead>
@@ -38,13 +39,13 @@
                             onclick="toggleCompletion(@plan.PlanId, true)"></i>
                         }
                     </td>
-
+                    <td>@plan.Category.Name</td>
 
                     <td>
-                        <a class="btn btn-warning btn-sm" href="@Url.Action(" Edit", "Plan" , new { id=plan.PlanId })">
+                        <a class="btn btn-warning btn-sm" href="@Url.Action("Edit", "Plan" , new { id=plan.PlanId })">
                             <i class="bi bi-pencil"></i> Düzenle
                         </a>
-                        <a class="btn btn-danger btn-sm" href="@Url.Action(" Delete", "Plan" , new { id=plan.PlanId })">
+                        <a class="btn btn-danger btn-sm" href="@Url.Action("Delete", "Plan" , new { id=plan.PlanId })">
                             <i class="bi bi-trash"></i> Sil
                         </a>
 
