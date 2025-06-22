@@ -11,5 +11,6 @@ namespace Plan_It.Data
         }
 
         public DbSet<Plan> Plans { get; set;}
+        public DbSet<Category> Categories { get; set;}
     }
 }

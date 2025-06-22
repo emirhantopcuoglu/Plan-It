@@ -10,6 +10,8 @@ namespace Plan_It.Models
         public bool IsCompleted { get; set; } = false;
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public DateTime Deadline { get; set; }
+        public int CategoryId { get; set; }
+        public Category? Category { get; set; }
 
     }
 }
