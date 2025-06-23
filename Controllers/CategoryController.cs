@@ -1,7 +1,9 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Plan_It.Models;
 using Plan_It.Repository;
 
+[Authorize(Roles = "Admin")]
 public class CategoryController : Controller
 {
     private readonly ICategoryRepository _categoryRepository;

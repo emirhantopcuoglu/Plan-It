@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Plan_It.Models;
 using Plan_It.Repository;
 using Plan_It.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Plan_It.Controllers
 {
+    [Authorize]
     public class PlanController : Controller
     {
         private readonly IPlanRepository _planRepository;

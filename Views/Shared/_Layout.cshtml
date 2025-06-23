@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="tr">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,29 +9,54 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
     <link href="~/css/site.css" rel="stylesheet" />
 </head>
+
 <body>
     <header>
         <!-- Navbar Başlangıcı -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-success">
             <div class="container-fluid">
-                <a class="navbar-brand" href="@Url.Action("Index", "Home")" style="font-weight: bold; font-size: 1.5rem;">
+                <a class="navbar-brand" href="@Url.Action(" Index", "Home" )"
+                    style="font-weight: bold; font-size: 1.5rem;">
                     <i class="bi bi-check-circle"></i> Plan-It
                 </a>
-                
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="@Url.Action("Index", "Home")">Anasayfa</a>
+                            <a class="nav-link active" asp-controller="Home" asp-action="Index">Anasayfa</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("Index", "Plan")">Planlarım</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("Create", "Plan")">Yeni Plan</a>
-                        </li>
+                        @if (User.Identity?.IsAuthenticated ?? false)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Plan" asp-action="Index">Planlarım</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Plan" asp-action="Create">Yeni Plan</a>
+                            </li>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Admin">Admin Paneli</a>
+                                </li>
+                            }
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Identity" asp-page="/Account/Logout">Çıkış</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Identity" asp-page="/Account/Register">Kaydol</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">Giriş</a>
+                            </li>
+                        }
+                        
                     </ul>
                 </div>
             </div>
@@ -46,7 +72,9 @@
         <p>&copy; 2024 Plan App. Tüm hakları saklıdır.</p>
     </footer>
 
-    
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    @RenderSection("Scripts", required: false)
 </body>
+
 </html>
