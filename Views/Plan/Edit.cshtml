@@ -1,26 +1,27 @@
-@model Plan
+@model PlanViewModel
 
-<h2>Plan güncelle</h2>
-<hr>
-<form asp-controller="Plan" asp-action="Edit" method="post">
-    <input type="hidden" asp-for="PlanId">   
-    
-    <div class="mb-3">
-        <label asp-for="Title" class="form-label">Başlık</label>
-        <input asp-for="Title" class="form-control">
+<h2>Planı Düzenle</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="PlanId" />
+
+    <div class="form-group">
+        <label>Başlık</label>
+        <input asp-for="Title" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Teslim Tarihi</label>
+        <input asp-for="Deadline" type="date" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Kategori</label>
+        <select asp-for="CategoryId" class="form-control" asp-items="Model.Categories"></select>
+    </div>
+    <div class="form-group">
+        <label>Durum</label>
+        <select asp-for="Status" class="form-control" asp-items="Html.GetEnumSelectList<PlanStatus>()"></select>
     </div>
 
-    <div class="mb-3">
-        <label asp-for="Deadline" class="form-label">Son Tarih</label>
-        <input asp-for="Deadline" class="form-control">
-    </div>
-    
-    <div class="mb-3">
-        <label asp-for="CategoryId" class="form-label">Kategori</label>
-        <select asp-for="CategoryId" class="form-select" asp-items="ViewBag.Categories">
-            <option value="">-- Kategori Seçiniz --</option>
-        </select>
-    </div>
-    <button type="submit" class="btn btn-secondary">Kaydet</button>
-
+    <button type="submit" class="btn btn-primary">Güncelle</button>
+    <a asp-action="Index" class="btn btn-secondary">İptal</a>
 </form>

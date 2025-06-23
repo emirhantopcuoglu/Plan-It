@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Plan_It.Areas.Identity.Data;
 using Plan_It.Data;
 using Plan_It.Models;
 
@@ -6,47 +7,54 @@ namespace Plan_It.Repository
 {
     public class PlanRepository : IPlanRepository
     {
-        private readonly PlanContext _planContext;
+        private readonly ApplicationDbContext _context;
 
-        public PlanRepository(PlanContext planContext)
+        public PlanRepository(ApplicationDbContext context)
         {
-            _planContext = planContext;
+            _context = context;
         }
 
-        public async Task<IEnumerable<Plan>> GetAllPlans()
+        public async Task<IEnumerable<Plan>> GetAllPlansAsync(string userId)
         {
-            return await _planContext.Plans
+            return await _context.Plans
+                .Where(p => p.UserId == userId)
                 .Include(p => p.Category)
+                .OrderByDescending(p => p.CreatedDate)
                 .ToListAsync();
         }
 
-        public async Task<Plan?> GetById(int id)
+        public async Task<Plan?> GetByIdAsync(int id, string userId)
         {
-            return await _planContext.Plans
+            return await _context.Plans
                 .Include(p => p.Category)
-                .FirstOrDefaultAsync(p => p.PlanId == id);
+                .FirstOrDefaultAsync(p => p.PlanId == id && p.UserId == userId);
         }
 
-        public async Task CreatePlan(Plan plan)
+        public async Task AddAsync(Plan plan)
         {
-            await _planContext.Plans.AddAsync(plan);
-            await _planContext.SaveChangesAsync();
+            if (plan == null)
+                throw new ArgumentNullException(nameof(plan));
+
+            await _context.Plans.AddAsync(plan);
+            await _context.SaveChangesAsync();
         }
 
-        public async Task UpdatePlan(Plan plan)
+        public async Task UpdateAsync(Plan plan)
         {
-            _planContext.Plans.Update(plan);
-            await _planContext.SaveChangesAsync();
+            if (plan == null)
+                throw new ArgumentNullException(nameof(plan));
+
+            _context.Plans.Update(plan);
+            await _context.SaveChangesAsync();
         }
 
-        public async Task DeletePlan(int id)
+        public async Task DeleteAsync(Plan plan)
         {
-            var plan = await _planContext.Plans.FindAsync(id);
-            if (plan != null)
-            {
-                _planContext.Plans.Remove(plan);
-                await _planContext.SaveChangesAsync();
-            }
+            if (plan == null)
+                throw new ArgumentNullException(nameof(plan));
+
+            _context.Plans.Remove(plan);
+            await _context.SaveChangesAsync();
         }
     }
 }

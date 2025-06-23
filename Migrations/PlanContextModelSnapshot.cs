@@ -3,13 +3,13 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Plan_It.Data;
+using Plan_It.Areas.Identity.Data;
 
 #nullable disable
 
 namespace Plan_It.Migrations
 {
-    [DbContext(typeof(PlanContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     partial class PlanContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -243,16 +243,23 @@ namespace Plan_It.Migrations
                     b.Property<DateTime>("Deadline")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("IsCompleted")
+                    b.Property<int>("Status")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("PlanId");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Plans");
                 });
@@ -316,7 +323,15 @@ namespace Plan_It.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Category");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Plan_It.Models.Category", b =>

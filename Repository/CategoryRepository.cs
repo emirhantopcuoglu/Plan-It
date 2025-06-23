@@ -1,13 +1,14 @@
 using Microsoft.EntityFrameworkCore;
+using Plan_It.Areas.Identity.Data;
 using Plan_It.Data;
 using Plan_It.Models;
 using Plan_It.Repository;
 
 public class CategoryRepository : ICategoryRepository
 {
-    private readonly PlanContext _context;
+    private readonly ApplicationDbContext _context;
 
-    public CategoryRepository(PlanContext context)
+    public CategoryRepository(ApplicationDbContext context)
     {
         _context = context;
     }

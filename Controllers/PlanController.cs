@@ -1,27 +1,31 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Plan_It.Models;
 using Plan_It.Repository;
-using Plan_It.Data;
-using Microsoft.AspNetCore.Authorization;
+using Plan_It.Services;
 
 namespace Plan_It.Controllers
 {
     [Authorize]
     public class PlanController : Controller
     {
-        private readonly IPlanRepository _planRepository;
+        private readonly IPlanService _planService;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public PlanController(IPlanRepository planRepository, ICategoryRepository categoryRepository)
+        public PlanController(IPlanService planService, ICategoryRepository categoryRepository, UserManager<IdentityUser> userManager)
         {
-            _planRepository = planRepository;
+            _planService = planService;
             _categoryRepository = categoryRepository;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
         {
-            var plans = await _planRepository.GetAllPlans();
+            var userId = _userManager.GetUserId(User);
+            var plans = await _planService.GetAllPlansAsync(userId);
             return View(plans);
         }
 
@@ -29,79 +33,114 @@ namespace Plan_It.Controllers
         public async Task<IActionResult> Create()
         {
             var categories = await _categoryRepository.GetAllCategories();
-            ViewBag.Categories = new SelectList(categories, "CategoryId", "Name");
-            return View();
+
+            var viewModel = new PlanViewModel
+            {
+                Categories = categories.Select(c => new SelectListItem
+                {
+                    Value = c.CategoryId.ToString(),
+                    Text = c.Name
+                })
+            };
+
+            return View(viewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Plan plan)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(PlanViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                await _planRepository.CreatePlan(plan);
-                return RedirectToAction(nameof(Index));
+                model.Categories = (await _categoryRepository.GetAllCategories())
+                    .Select(c => new SelectListItem { Value = c.CategoryId.ToString(), Text = c.Name });
+                return View(model);
             }
 
-            var categories = await _categoryRepository.GetAllCategories();
-            ViewBag.Categories = new SelectList(categories, "CategoryId", "Name", plan.CategoryId);
+            var userId = _userManager.GetUserId(User);
+            var result = await _planService.CreatePlanAsync(model, userId);
 
-            return View(plan);
+            if (!result)
+            {
+                ModelState.AddModelError("", "Plan oluşturulamadı.");
+                return View(model);
+            }
+
+            return RedirectToAction(nameof(Index));
         }
-
 
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var plan = await _planRepository.GetById(id);
-            if (plan == null) return NotFound();
+            var userId = _userManager.GetUserId(User);
+            var plan = await _planService.GetPlanByIdAsync(id, userId);
+            if (plan == null)
+                return NotFound();
 
             var categories = await _categoryRepository.GetAllCategories();
-            ViewBag.Categories = new SelectList(categories, "CategoryId", "Name", plan.CategoryId);
-            return View(plan);
+
+            var viewModel = new PlanViewModel
+            {
+                PlanId = plan.PlanId,
+                Title = plan.Title,
+                Deadline = plan.Deadline,
+                CategoryId = plan.CategoryId,
+                Status = plan.Status,
+                Categories = categories.Select(c => new SelectListItem
+                {
+                    Value = c.CategoryId.ToString(),
+                    Text = c.Name
+                })
+            };
+
+            return View(viewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, Plan plan)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, PlanViewModel model)
         {
-            if (id != plan.PlanId) return BadRequest();
+            if (id != model.PlanId)
+                return BadRequest();
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                await _planRepository.UpdatePlan(plan);
-                return RedirectToAction(nameof(Index));
+                model.Categories = (await _categoryRepository.GetAllCategories())
+                    .Select(c => new SelectListItem { Value = c.CategoryId.ToString(), Text = c.Name });
+                return View(model);
             }
 
-            var categories = await _categoryRepository.GetAllCategories();
-            ViewBag.Categories = new SelectList(categories, "CategoryId", "Name", plan.CategoryId);
-            return View(plan);
+            var userId = _userManager.GetUserId(User);
+            var result = await _planService.UpdatePlanAsync(model, userId);
+
+            if (!result)
+                return NotFound();
+
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            var plan = await _planRepository.GetById(id);
-            if (plan == null) return NotFound();
+            var userId = _userManager.GetUserId(User);
+            var plan = await _planService.GetPlanByIdAsync(id, userId);
+            if (plan == null)
+                return NotFound();
 
             return View(plan);
         }
 
         [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _planRepository.DeletePlan(id);
+            var userId = _userManager.GetUserId(User);
+            var result = await _planService.DeletePlanAsync(id, userId);
+
+            if (!result)
+                return NotFound();
+
             return RedirectToAction(nameof(Index));
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> UpdateCompletionStatus(int id, bool isCompleted)
-        {
-            var plan = await _planRepository.GetById(id);
-            if (plan == null) return NotFound();
-
-            plan.IsCompleted = isCompleted;
-            await _planRepository.UpdatePlan(plan);
-
-            return Json(new { success = true });
         }
     }
 }

@@ -4,13 +4,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Plan_It.Areas.Identity.Data;
 using Plan_It.Data;
 
 #nullable disable
 
 namespace Plan_It.Migrations
 {
-    [DbContext(typeof(PlanContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     [Migration("20250622134437_InitialCreate")]
     partial class InitialCreate
     {
