@@ -2,20 +2,21 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Plan_It.Models;
 using Plan_It.Repository;
+using Plan_It.Services;
 
 [Authorize(Roles = "Admin")]
 public class CategoryController : Controller
 {
-    private readonly ICategoryRepository _categoryRepository;
+    private readonly ICategoryService _categoryService;
 
-    public CategoryController(ICategoryRepository categoryRepository)
+    public CategoryController(ICategoryService categoryService)
     {
-        _categoryRepository = categoryRepository;
+        _categoryService = categoryService;
     }
 
     public async Task<IActionResult> Index()
     {
-        var categories = await _categoryRepository.GetAllCategories();
+        var categories = await _categoryService.GetAllCategoriesAsync();
         return View(categories);
     }
 
@@ -30,7 +31,7 @@ public class CategoryController : Controller
     {
         if (ModelState.IsValid)
         {
-            await _categoryRepository.CreateCategory(category);
+            await _categoryService.CreateCategoryAsync(category);
             return RedirectToAction(nameof(Index));
         }
 
@@ -40,7 +41,7 @@ public class CategoryController : Controller
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {
-        var category = await _categoryRepository.GetById(id);
+        var category = await _categoryService.GetCategoryByIdAsync(id);
         if (category == null)
         {
             return NotFound();
@@ -59,7 +60,7 @@ public class CategoryController : Controller
 
         if (ModelState.IsValid)
         {
-            await _categoryRepository.UpdateCategory(category);
+            await _categoryService.UpdateCategoryAsync(category);
             return RedirectToAction(nameof(Index));
         }
 
@@ -69,7 +70,7 @@ public class CategoryController : Controller
     [HttpGet]
     public async Task<IActionResult> Delete(int id)
     {
-        var category = await _categoryRepository.GetById(id);
+        var category = await _categoryService.GetCategoryByIdAsync(id);
         if (category == null)
         {
             return NotFound();
@@ -81,7 +82,7 @@ public class CategoryController : Controller
     [HttpPost, ActionName("Delete")]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        await _categoryRepository.DeleteCategory(id);
+        await _categoryService.DeleteCategoryAsync(id);
         return RedirectToAction(nameof(Index));
     }
 }

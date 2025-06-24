@@ -12,13 +12,13 @@ namespace Plan_It.Controllers
     public class PlanController : Controller
     {
         private readonly IPlanService _planService;
-        private readonly ICategoryRepository _categoryRepository;
+        private readonly ICategoryService _categoryService;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public PlanController(IPlanService planService, ICategoryRepository categoryRepository, UserManager<IdentityUser> userManager)
+        public PlanController(IPlanService planService, ICategoryService categoryService, UserManager<IdentityUser> userManager)
         {
             _planService = planService;
-            _categoryRepository = categoryRepository;
+            _categoryService = categoryService;
             _userManager = userManager;
         }
 
@@ -32,7 +32,7 @@ namespace Plan_It.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            var categories = await _categoryRepository.GetAllCategories();
+            var categories = await _categoryService.GetAllCategoriesAsync();
 
             var viewModel = new PlanViewModel
             {
@@ -52,7 +52,7 @@ namespace Plan_It.Controllers
         {
             if (!ModelState.IsValid)
             {
-                model.Categories = (await _categoryRepository.GetAllCategories())
+                model.Categories = (await _categoryService.GetAllCategoriesAsync())
                     .Select(c => new SelectListItem { Value = c.CategoryId.ToString(), Text = c.Name });
                 return View(model);
             }
@@ -77,7 +77,7 @@ namespace Plan_It.Controllers
             if (plan == null)
                 return NotFound();
 
-            var categories = await _categoryRepository.GetAllCategories();
+            var categories = await _categoryService.GetAllCategoriesAsync();
 
             var viewModel = new PlanViewModel
             {
@@ -105,7 +105,7 @@ namespace Plan_It.Controllers
 
             if (!ModelState.IsValid)
             {
-                model.Categories = (await _categoryRepository.GetAllCategories())
+                model.Categories = (await _categoryService.GetAllCategoriesAsync())
                     .Select(c => new SelectListItem { Value = c.CategoryId.ToString(), Text = c.Name });
                 return View(model);
             }

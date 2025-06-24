@@ -4,10 +4,10 @@ namespace Plan_It.Repository
 {
     public interface ICategoryRepository
     {
-        Task<IEnumerable<Category>> GetAllCategories();
-        Task<Category?> GetById(int id);
-        Task CreateCategory(Category category);
-        Task UpdateCategory(Category category);
-        Task DeleteCategory(int id);
+        Task<IEnumerable<Category>> GetAllCategoriesAsync();
+        Task<Category?> GetByIdAsync(int id);
+        Task AddAsync(Category category);
+        Task UpdateAsync(Category category);
+        Task DeleteAsync(Category category);
     }
 }

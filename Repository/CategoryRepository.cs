@@ -12,36 +12,45 @@ public class CategoryRepository : ICategoryRepository
     {
         _context = context;
     }
-
-    public async Task<IEnumerable<Category>> GetAllCategories()
+    public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
     {
         return await _context.Categories.ToListAsync();
     }
 
-    public async Task<Category?> GetById(int id)
+    public async Task<Category?> GetByIdAsync(int id)
     {
-        return await _context.Categories.Include(c => c.Plans).FirstOrDefaultAsync(c => c.CategoryId == id);
+        return await _context.Categories.FirstOrDefaultAsync(c => c.CategoryId == id);
     }
 
-    public async Task CreateCategory(Category category)
+    public async Task AddAsync(Category category)
     {
+        if (category == null)
+            throw new ArgumentNullException(nameof(category));
+
         await _context.Categories.AddAsync(category);
         await _context.SaveChangesAsync();
     }
 
-    public async Task UpdateCategory(Category category)
+    public async Task UpdateAsync(Category category)
     {
+        if (category == null)
+            throw new ArgumentNullException(nameof(category));
+
         _context.Categories.Update(category);
         await _context.SaveChangesAsync();
     }
 
-    public async Task DeleteCategory(int id)
+    public async Task DeleteAsync(Category category)
     {
-        var category = await _context.Categories.Include(c => c.Plans).FirstOrDefaultAsync(c => c.CategoryId == id);
-        if (category != null)
-        {
-            _context.Categories.Remove(category);
-            await _context.SaveChangesAsync();
-        }
+        if (category == null)
+            throw new ArgumentNullException(nameof(category));
+
+        _context.Categories.Remove(category);
+        await _context.SaveChangesAsync();
     }
+
+
+
+
+
 }
