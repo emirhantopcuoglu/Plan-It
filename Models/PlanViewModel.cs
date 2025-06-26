@@ -25,5 +25,7 @@ namespace Plan_It.Models
         public int CategoryId { get; set; }
 
         public IEnumerable<SelectListItem>? Categories { get; set; }
+
+        public PriorityLevel Priority { get; set; }
     }
 }

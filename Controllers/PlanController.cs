@@ -34,6 +34,8 @@ namespace Plan_It.Controllers
         {
             var categories = await _categoryService.GetAllCategoriesAsync();
 
+            ViewBag.Priorities = Enum.GetValues(typeof(PriorityLevel));
+
             var viewModel = new PlanViewModel
             {
                 Categories = categories.Select(c => new SelectListItem
@@ -56,7 +58,7 @@ namespace Plan_It.Controllers
                     .Select(c => new SelectListItem { Value = c.CategoryId.ToString(), Text = c.Name });
                 return View(model);
             }
-
+            ViewBag.Priorities = Enum.GetValues(typeof(PriorityLevel));
             var userId = _userManager.GetUserId(User);
             var result = await _planService.CreatePlanAsync(model, userId);
 
@@ -86,13 +88,14 @@ namespace Plan_It.Controllers
                 Deadline = plan.Deadline,
                 CategoryId = plan.CategoryId,
                 Status = plan.Status,
+                Priority = plan.Priority,
                 Categories = categories.Select(c => new SelectListItem
                 {
                     Value = c.CategoryId.ToString(),
                     Text = c.Name
                 })
             };
-
+            ViewBag.Priorities = Enum.GetValues(typeof(PriorityLevel));
             return View(viewModel);
         }
 
@@ -112,7 +115,7 @@ namespace Plan_It.Controllers
 
             var userId = _userManager.GetUserId(User);
             var result = await _planService.UpdatePlanAsync(model, userId);
-
+            ViewBag.Priorities = Enum.GetValues(typeof(PriorityLevel));
             if (!result)
                 return NotFound();
 

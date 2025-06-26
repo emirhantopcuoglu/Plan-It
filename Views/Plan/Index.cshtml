@@ -11,6 +11,7 @@
             <th>Tarih</th>
             <th>Kategori</th>
             <th>Durum</th>
+            <th>Öncelik</th>
             <th>İşlemler</th>
         </tr>
     </thead>
@@ -34,7 +35,16 @@
                 }
                 @statusText
             </td>
-
+            <td>@{
+                    var priorityText = plan.Priority switch
+                    {
+                        PriorityLevel.Low => "Düşük",
+                        PriorityLevel.Medium => "Orta",
+                        PriorityLevel.High=> "Yüksek",
+                        _ => "Bilinmiyor"
+                    };
+                }
+                @priorityText</td>
             <td>
                 <a asp-action="Edit" asp-route-id="@plan.PlanId" class="btn btn-primary">Düzenle</a>
                 <form asp-action="Delete" asp-route-id="@plan.PlanId" method="post" style="display:inline;">

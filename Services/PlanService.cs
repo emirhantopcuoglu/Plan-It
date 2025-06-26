@@ -34,6 +34,7 @@ namespace Plan_It.Services
                 CategoryId = model.CategoryId,
                 Status = model.Status,
                 CreatedDate = DateTime.UtcNow,
+                Priority = model.Priority,
                 UserId = userId
             };
 
@@ -54,6 +55,7 @@ namespace Plan_It.Services
             existingPlan.Deadline = model.Deadline;
             existingPlan.CategoryId = model.CategoryId;
             existingPlan.Status = model.Status;
+            existingPlan.Priority = model.Priority;
 
             await _planRepository.UpdateAsync(existingPlan);
             return true;

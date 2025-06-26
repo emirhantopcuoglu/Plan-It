@@ -38,5 +38,7 @@ namespace Plan_It.Models
 
         [ForeignKey(nameof(UserId))]
         public IdentityUser? User { get; set; }
+
+        public PriorityLevel Priority { get; set; }
     }
 }
