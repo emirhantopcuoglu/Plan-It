@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Plan_It.Models
 {
-    public class PlanViewModel
+    public class PlanViewModel : IValidatableObject
     {
         public int PlanId { get; set; }
 
@@ -21,11 +21,27 @@ namespace Plan_It.Models
         public PlanStatus Status { get; set; } = PlanStatus.NotStarted;
 
         [Required(ErrorMessage = "Kategori seçilmelidir.")]
+        [Range(1, int.MaxValue, ErrorMessage = "Geçerli bir kategori seçiniz.")]
         [Display(Name = "Kategori")]
         public int CategoryId { get; set; }
 
+        [Required(ErrorMessage = "Öncelik seçilmelidir.")]
+        [EnumDataType(typeof(PriorityLevel), ErrorMessage = "Geçerli bir öncelik seçiniz.")]
+        [Display(Name = "Öncelik")]
+        public PriorityLevel Priority { get; set; }
+
         public IEnumerable<SelectListItem>? Categories { get; set; }
 
-        public PriorityLevel Priority { get; set; }
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            // Only enforce future-deadline on create (PlanId == 0).
+            // Editing an existing plan may legitimately need a past date untouched.
+            if (PlanId == 0 && Deadline.Date < DateTime.UtcNow.Date)
+            {
+                yield return new ValidationResult(
+                    "Son tarih bugün veya ileri bir tarih olmalıdır.",
+                    new[] { nameof(Deadline) });
+            }
+        }
     }
 }
