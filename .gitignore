@@ -1,51 +1,95 @@
-# Build results
+# ──────────────────────────────────────────────────────────
+# Build & intermediate output
+# ──────────────────────────────────────────────────────────
 bin/
 obj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa]rtifacts/
+[Bb]uild[Ll]og.*
+*.binlog
 
-# Visual Studio
+# ──────────────────────────────────────────────────────────
+# IDE — Visual Studio / Rider / VS Code
+# ──────────────────────────────────────────────────────────
 .vs/
+.vscode/
+.idea/
 *.suo
 *.user
 *.userosscache
 *.sln.docstates
 *.csproj.user
-
-# Rider / JetBrains
-.idea/
 *.DotSettings.user
+*.swp
+*.swo
+*~
 
-# OS
+# ──────────────────────────────────────────────────────────
+# Claude / AI tooling
+# ──────────────────────────────────────────────────────────
+.claude/
+
+# ──────────────────────────────────────────────────────────
+# OS-generated files
+# ──────────────────────────────────────────────────────────
 Thumbs.db
-.DS_Store
+ehthumbs.db
 Desktop.ini
+.DS_Store
 $RECYCLE.BIN/
 
-# ASP.NET Core secrets and environment-specific config
+# ──────────────────────────────────────────────────────────
+# Secrets & environment-specific configuration
+# ──────────────────────────────────────────────────────────
 appsettings.Development.json
 appsettings.Production.json
+appsettings.Local.json
 secrets.json
+*.pfx
+*.key
 
-# SQLite database files — never commit the local DB
+# ──────────────────────────────────────────────────────────
+# SQLite — local database artefacts
+# ──────────────────────────────────────────────────────────
 *.db
 *.db-journal
 *.db-shm
 *.db-wal
+*.sqlite
+*.sqlite3
 
+# ──────────────────────────────────────────────────────────
 # Publish output
+# ──────────────────────────────────────────────────────────
 publish/
+PublishProfiles/
 *.pubxml
 *.pubxml.user
 *.publishsettings
+*.azurePubxml
 
-# Package management
+# ──────────────────────────────────────────────────────────
+# Package management & vendored dependencies
+# ──────────────────────────────────────────────────────────
 node_modules/
 packages/
 *.nupkg
 *.nuspec
+project.lock.json
+project.fragment.lock.json
 
-# Logs and crashes
+# Static assets fetched via libman / CDN — installed at build time
+wwwroot/lib/
+
+# ──────────────────────────────────────────────────────────
+# Logs, crashes, temp
+# ──────────────────────────────────────────────────────────
 *.log
 *.stackdump
 *.dmp
 *.tmp
 *.temp
+*.cache
