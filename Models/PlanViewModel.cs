@@ -8,7 +8,7 @@ namespace Plan_It.Models
         public int PlanId { get; set; }
 
         [Required(ErrorMessage = "Başlık zorunludur.")]
-        [StringLength(100)]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "Başlık 2-50 karakter arasında olmalıdır.")]
         [Display(Name = "Başlık")]
         public string Title { get; set; } = string.Empty;
 
