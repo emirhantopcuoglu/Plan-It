@@ -70,5 +70,10 @@ namespace Plan_It.Services
             await _planRepository.DeleteAsync(existingPlan);
             return true;
         }
+
+        public async Task ChangePlanStatusAsync(int planId, string userId, PlanStatus status)
+        {
+            await _planRepository.UpdateStatusAsync(planId, userId, status);
+        }
     }
 }

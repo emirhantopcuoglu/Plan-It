@@ -1,33 +1,43 @@
 @model PlanViewModel
 
-<h2>Planı Düzenle</h2>
+<link href="~/css/plan-forms.css" rel="stylesheet" />
 
-<form asp-action="Edit" method="post">
-    <input type="hidden" asp-for="PlanId" />
+<h2 class="edit-title mb-4">Planı Düzenle</h2>
 
-    <div class="form-group">
-        <label>Başlık</label>
-        <input asp-for="Title" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label>Teslim Tarihi</label>
-        <input asp-for="Deadline" type="date" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label>Kategori</label>
-        <select asp-for="CategoryId" class="form-control" asp-items="Model.Categories"></select>
-    </div>
-    <div class="form-group">
-        <label>Durum</label>
-        <select asp-for="Status" class="form-control" asp-items="Html.GetEnumSelectList<PlanStatus>()"></select>
-    </div>
-    <div class="form-group">
-        <label for="Priority">Öncelik</label>
-        <select asp-for="Priority" class="form-control" asp-items="new SelectList(ViewBag.Priorities)">
-            <option value="">Seçiniz</option>
-        </select>
-    </div>
+<div class="edit-form-container">
+    <form asp-action="Edit" method="post" autocomplete="off">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="PlanId" />
 
-    <button type="submit" class="btn btn-primary">Güncelle</button>
-    <a asp-action="Index" class="btn btn-secondary">İptal</a>
-</form>
+        <div class="edit-form-group">
+            <label asp-for="Title" class="edit-label">Başlık</label>
+            <input asp-for="Title" class="form-control edit-input" placeholder="Plan başlığı giriniz..." />
+            <span asp-validation-for="Title" class="text-danger small"></span>
+        </div>
+        <div class="edit-form-group">
+            <label asp-for="Deadline" class="edit-label">Teslim Tarihi</label>
+            <input asp-for="Deadline" type="date" class="form-control edit-input" />
+            <span asp-validation-for="Deadline" class="text-danger small"></span>
+        </div>
+        <div class="edit-form-group">
+            <label asp-for="CategoryId" class="edit-label">Kategori</label>
+            <select asp-for="CategoryId" class="form-control edit-input" asp-items="Model.Categories"></select>
+            <span asp-validation-for="CategoryId" class="text-danger small"></span>
+        </div>
+        <div class="edit-form-group">
+            <label asp-for="Status" class="edit-label">Durum</label>
+            <select asp-for="Status" class="form-control edit-input" asp-items="Html.GetEnumSelectList<PlanStatus>()"></select>
+        </div>
+        <div class="edit-form-group">
+            <label asp-for="Priority" class="edit-label">Öncelik</label>
+            <select asp-for="Priority" class="form-control edit-input" asp-items="new SelectList(ViewBag.Priorities)">
+                <option value="">Seçiniz</option>
+            </select>
+        </div>
+
+        <div class="edit-form-actions mt-4">
+            <button type="submit" class="btn edit-btn-save">Güncelle</button>
+            <a asp-action="Index" class="btn edit-btn-cancel">İptal</a>
+        </div>
+    </form>
+</div>

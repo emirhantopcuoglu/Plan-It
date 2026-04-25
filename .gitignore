@@ -1,69 +1,51 @@
-# Tüm wwwroot klasörünü hariç tut
-wwwroot/
+# Build results
+bin/
+obj/
 
-## Windows işletim sistemi dosyaları
-Thumbs.db
-ehthumbs.db
-Desktop.ini
-$RECYCLE.BIN/
-
-## Visual Studio dosyaları
+# Visual Studio
 .vs/
 *.suo
 *.user
 *.userosscache
 *.sln.docstates
+*.csproj.user
 
-## Build sonuçları
-bin/
-obj/
-*.dll
-*.pdb
-*.exe
-*.appx
-*.dbmdl
-*.log
-*.jfm
-
-## Paket yönetim dosyaları
-node_modules/
-bower_components/
-
-## ASP.NET yayınlama dosyaları
-*.publishsettings
-*.pubxml
-*.pubxml.user
-
-## Geliştirme araçları dosyaları
-project.lock.json
-project.fragment.lock.json
-artifacts/
-
-## Log ve hata raporlama dosyaları
-*.stackdump
-*.log
-*.dmp
-
-## Resharper ve benzeri araçların dosyaları
-_ReSharper*/
+# Rider / JetBrains
+.idea/
 *.DotSettings.user
 
-## Web yapılandırma dosyaları
-appsettings.json
-appsettings.*.json
-web.config
-web.*.config
+# OS
+Thumbs.db
+.DS_Store
+Desktop.ini
+$RECYCLE.BIN/
 
-## Temp dosyalar
-*.tmp
-*.temp
-*.cache
+# ASP.NET Core secrets and environment-specific config
+appsettings.Development.json
+appsettings.Production.json
+secrets.json
 
-## Paket yönetimi için üretilen dosyalar
+# SQLite database files — never commit the local DB
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+
+# Publish output
+publish/
+*.pubxml
+*.pubxml.user
+*.publishsettings
+
+# Package management
+node_modules/
 packages/
 *.nupkg
 *.nuspec
 
-## Geriye dönük uyumluluk dosyaları
-*.csproj.user
-*.vbproj.user
+# Logs and crashes
+*.log
+*.stackdump
+*.dmp
+*.tmp
+*.temp

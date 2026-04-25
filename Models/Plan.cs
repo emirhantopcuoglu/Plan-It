@@ -34,7 +34,7 @@ namespace Plan_It.Models
         public Category? Category { get; set; }
 
         [Required]
-        public string UserId { get; set; }
+        public string UserId { get; set; } = string.Empty;
 
         [ForeignKey(nameof(UserId))]
         public IdentityUser? User { get; set; }

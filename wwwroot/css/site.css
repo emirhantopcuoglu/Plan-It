@@ -1,0 +1,105 @@
+body {
+    background: #f6f8fa;
+    min-height: 100vh;
+    font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+}
+
+/* ── Navbar ──────────────────────────────────────────────── */
+.navbar-kanban {
+    background: linear-gradient(90deg, #7be495 0, #5fbcff 100%) !important;
+    box-shadow: 0 4px 20px #b1f3ef19;
+}
+
+.navbar-kanban .navbar-brand {
+    font-weight: 800;
+    font-size: 1.45rem;
+    letter-spacing: -0.01em;
+    color: #215067 !important;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.navbar-kanban .navbar-brand i {
+    font-size: 1.3rem;
+}
+
+.navbar-kanban .nav-link {
+    color: #215067 !important;
+    font-weight: 600;
+    font-size: 0.97em;
+    border-radius: 9px;
+    padding: 6px 13px;
+    transition: background 0.12s, color 0.11s;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-kanban .nav-link.active,
+.navbar-kanban .nav-link:hover {
+    background: rgba(255, 255, 255, 0.45);
+    color: #0d4a66 !important;
+}
+
+.navbar-kanban .nav-link.nav-login-btn {
+    background: rgba(255, 255, 255, 0.55);
+    border: 1.5px solid rgba(255, 255, 255, 0.7);
+    border-radius: 999px;
+    padding: 5px 16px;
+}
+
+.navbar-kanban .nav-link.nav-login-btn:hover {
+    background: #fff;
+}
+
+/* User avatar badge */
+.nav-user {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.user-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.78em;
+    color: #215067;
+    flex-shrink: 0;
+}
+
+/* ── Main content container ──────────────────────────────── */
+.main-kanban-content {
+    background: #fff;
+    border-radius: 1.25em;
+    box-shadow: 0 8px 36px #b1f3ef18;
+    margin-top: 32px;
+    margin-bottom: 48px;
+    padding: 38px 24px 30px;
+}
+
+/* ── Footer ──────────────────────────────────────────────── */
+.footer-kanban {
+    background: #f9fafb;
+    color: #7a98b8;
+    font-size: 0.97em;
+    border-top: 2px solid #eaf1f7;
+    box-shadow: 0 -4px 22px #b1f3ef12;
+}
+
+/* ── Scrollbar ───────────────────────────────────────────── */
+::-webkit-scrollbar          { height: 10px; width: 9px; background: #eaf1f7; border-radius: 8px; }
+::-webkit-scrollbar-thumb    { background: #b2e6fa; border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: #7be495; }
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 900px) {
+    .main-kanban-content { padding: 16px 2vw 12px; margin-top: 16px; }
+    .navbar-kanban .navbar-brand { font-size: 1.18rem; }
+}

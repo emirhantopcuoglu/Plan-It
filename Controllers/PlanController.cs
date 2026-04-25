@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Plan_It.Models;
-using Plan_It.Repository;
 using Plan_It.Services;
 
 namespace Plan_It.Controllers
@@ -25,26 +24,18 @@ namespace Plan_It.Controllers
         public async Task<IActionResult> Index()
         {
             var userId = _userManager.GetUserId(User);
-            var plans = await _planService.GetAllPlansAsync(userId);
+            var plans = await _planService.GetAllPlansAsync(userId!);
             return View(plans);
         }
 
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            var categories = await _categoryService.GetAllCategoriesAsync();
-
-            ViewBag.Priorities = Enum.GetValues(typeof(PriorityLevel));
-
             var viewModel = new PlanViewModel
             {
-                Categories = categories.Select(c => new SelectListItem
-                {
-                    Value = c.CategoryId.ToString(),
-                    Text = c.Name
-                })
+                Categories = await GetCategorySelectListAsync()
             };
-
+            SetPriorityViewBag();
             return View(viewModel);
         }
 
@@ -54,17 +45,19 @@ namespace Plan_It.Controllers
         {
             if (!ModelState.IsValid)
             {
-                model.Categories = (await _categoryService.GetAllCategoriesAsync())
-                    .Select(c => new SelectListItem { Value = c.CategoryId.ToString(), Text = c.Name });
+                model.Categories = await GetCategorySelectListAsync();
+                SetPriorityViewBag();
                 return View(model);
             }
-            ViewBag.Priorities = Enum.GetValues(typeof(PriorityLevel));
-            var userId = _userManager.GetUserId(User);
+
+            var userId = _userManager.GetUserId(User)!;
             var result = await _planService.CreatePlanAsync(model, userId);
 
             if (!result)
             {
                 ModelState.AddModelError("", "Plan oluşturulamadı.");
+                model.Categories = await GetCategorySelectListAsync();
+                SetPriorityViewBag();
                 return View(model);
             }
 
@@ -75,11 +68,9 @@ namespace Plan_It.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             var userId = _userManager.GetUserId(User);
-            var plan = await _planService.GetPlanByIdAsync(id, userId);
+            var plan = await _planService.GetPlanByIdAsync(id, userId!);
             if (plan == null)
                 return NotFound();
-
-            var categories = await _categoryService.GetAllCategoriesAsync();
 
             var viewModel = new PlanViewModel
             {
@@ -89,13 +80,9 @@ namespace Plan_It.Controllers
                 CategoryId = plan.CategoryId,
                 Status = plan.Status,
                 Priority = plan.Priority,
-                Categories = categories.Select(c => new SelectListItem
-                {
-                    Value = c.CategoryId.ToString(),
-                    Text = c.Name
-                })
+                Categories = await GetCategorySelectListAsync()
             };
-            ViewBag.Priorities = Enum.GetValues(typeof(PriorityLevel));
+            SetPriorityViewBag();
             return View(viewModel);
         }
 
@@ -108,42 +95,55 @@ namespace Plan_It.Controllers
 
             if (!ModelState.IsValid)
             {
-                model.Categories = (await _categoryService.GetAllCategoriesAsync())
-                    .Select(c => new SelectListItem { Value = c.CategoryId.ToString(), Text = c.Name });
+                model.Categories = await GetCategorySelectListAsync();
+                SetPriorityViewBag();
                 return View(model);
             }
 
-            var userId = _userManager.GetUserId(User);
+            var userId = _userManager.GetUserId(User)!;
             var result = await _planService.UpdatePlanAsync(model, userId);
-            ViewBag.Priorities = Enum.GetValues(typeof(PriorityLevel));
+
             if (!result)
                 return NotFound();
 
             return RedirectToAction(nameof(Index));
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var userId = _userManager.GetUserId(User);
-            var plan = await _planService.GetPlanByIdAsync(id, userId);
-            if (plan == null)
-                return NotFound();
-
-            return View(plan);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var userId = _userManager.GetUserId(User);
+            var userId = _userManager.GetUserId(User)!;
             var result = await _planService.DeletePlanAsync(id, userId);
 
             if (!result)
                 return NotFound();
 
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeStatus(int planId, PlanStatus status)
+        {
+            var userId = _userManager.GetUserId(User)!;
+            await _planService.ChangePlanStatusAsync(planId, userId, status);
+            return Ok();
+        }
+
+        private async Task<IEnumerable<SelectListItem>> GetCategorySelectListAsync()
+        {
+            var categories = await _categoryService.GetAllCategoriesAsync();
+            return categories.Select(c => new SelectListItem
+            {
+                Value = c.CategoryId.ToString(),
+                Text = c.Name
+            });
+        }
+
+        private void SetPriorityViewBag()
+        {
+            ViewBag.Priorities = Enum.GetValues(typeof(PriorityLevel));
         }
     }
 }

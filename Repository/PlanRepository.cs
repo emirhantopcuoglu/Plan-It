@@ -17,6 +17,7 @@ namespace Plan_It.Repository
         public async Task<IEnumerable<Plan>> GetAllPlansAsync(string userId)
         {
             return await _context.Plans
+                .AsNoTracking()
                 .Where(p => p.UserId == userId)
                 .Include(p => p.Category)
                 .OrderByDescending(p => p.CreatedDate)
@@ -54,6 +55,18 @@ namespace Plan_It.Repository
                 throw new ArgumentNullException(nameof(plan));
 
             _context.Plans.Remove(plan);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateStatusAsync(int planId, string userId, PlanStatus status)
+        {
+            var plan = await _context.Plans
+                .FirstOrDefaultAsync(p => p.PlanId == planId && p.UserId == userId);
+
+            if (plan == null)
+                return;
+
+            plan.Status = status;
             await _context.SaveChangesAsync();
         }
     }

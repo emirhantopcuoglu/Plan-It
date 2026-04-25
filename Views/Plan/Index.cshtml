@@ -1,57 +1,183 @@
 @model IEnumerable<Plan>
 
-<h2>Planlar</h2>
+<link href="~/css/plan-kanban.css" rel="stylesheet" />
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css" />
 
-<a asp-action="Create" class="btn btn-success">Yeni Plan</a>
+<h2 class="kanban-title mb-4">Planlar (Kanban)</h2>
+<a asp-action="Create" class="btn kanban-create-btn mb-4">+ Yeni Plan</a>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Başlık</th>
-            <th>Tarih</th>
-            <th>Kategori</th>
-            <th>Durum</th>
-            <th>Öncelik</th>
-            <th>İşlemler</th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach (var plan in Model)
+<div class="kanban-board">
+@{
+    var statusList = new[]
     {
-        <tr>
-            <td>@plan.Title</td>
-            <td>@plan.Deadline.ToShortDateString()</td>
-            <td>@plan.Category?.Name</td>
-            <td>
-                @{
-                    var statusText = plan.Status switch
+        PlanStatus.NotStarted,
+        PlanStatus.InProgress,
+        PlanStatus.Completed,
+        PlanStatus.Cancelled
+    };
+
+    var statusTitles = new Dictionary<PlanStatus, string>
+    {
+        { PlanStatus.NotStarted, "Başlamadı" },
+        { PlanStatus.InProgress, "Devam Ediyor" },
+        { PlanStatus.Completed, "Tamamlandı" },
+        { PlanStatus.Cancelled, "İptal Edildi" }
+    };
+
+    var statusColors = new Dictionary<PlanStatus, string>
+    {
+        { PlanStatus.NotStarted, "#ffe066" },
+        { PlanStatus.InProgress, "#5fbcff" },
+        { PlanStatus.Completed, "#7be495" },
+        { PlanStatus.Cancelled, "#ff6b6b" }
+    };
+
+    var cardIcons = new Dictionary<PlanStatus, string>
+    {
+        { PlanStatus.NotStarted, "⏳" },
+        { PlanStatus.InProgress, "🔄" },
+        { PlanStatus.Completed, "✅" },
+        { PlanStatus.Cancelled, "❌" }
+    };
+}
+@foreach (var status in statusList)
+{
+    var plansInStatus = Model.Where(p => p.Status == status).ToList();
+    <div class="kanban-column" data-status="@((int)status)">
+        <div class="kanban-header" style="border-top: 5px solid @statusColors[status]">
+            <span class="kanban-header-icon">@cardIcons[status]</span>
+            <span class="kanban-header-title">@statusTitles[status]</span>
+            <span class="kanban-header-count">@plansInStatus.Count</span>
+        </div>
+        <div class="kanban-card-list">
+            @if (!plansInStatus.Any())
+            {
+                <div class="kanban-empty-placeholder">Burada plan yok.</div>
+            }
+            else
+            {
+                foreach (var plan in plansInStatus)
+                {
+                    var priorityColor = plan.Priority switch
                     {
-                        PlanStatus.NotStarted => "Başlamadı",
-                        PlanStatus.InProgress => "Devam Ediyor",
-                        PlanStatus.Completed => "Tamamlandı",
-                        PlanStatus.Cancelled => "İptal Edildi",
-                        _ => "Bilinmiyor"
+                        PriorityLevel.Low => "#b2e6fa",
+                        PriorityLevel.Medium => "#ffd166",
+                        PriorityLevel.High => "#ef476f",
+                        _ => "#bdbdbd"
                     };
+                    <div class="kanban-card" data-id="@plan.PlanId"
+                         style="border-left: 4px solid @priorityColor">
+                        <div class="kanban-card-content">
+                            <div class="kanban-card-title">@plan.Title</div>
+                            <div class="kanban-card-meta">
+                                <span title="Kategori"><b>@plan.Category?.Name</b></span> &bull;
+                                <span title="Tarih">@plan.Deadline.ToShortDateString()</span> &bull;
+                                <span title="Öncelik" style="color:@priorityColor;"><b>@plan.Priority</b></span>
+                            </div>
+                            <div class="kanban-card-actions mt-2">
+                                <a asp-action="Edit" asp-route-id="@plan.PlanId" class="btn btn-xs btn-outline-primary">Düzenle</a>
+                                <button type="button"
+                                        class="btn btn-outline-danger btn-xs"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#confirmDeleteModal"
+                                        data-id="@plan.PlanId"
+                                        data-title="@plan.Title">
+                                    Sil
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 }
-                @statusText
-            </td>
-            <td>@{
-                    var priorityText = plan.Priority switch
-                    {
-                        PriorityLevel.Low => "Düşük",
-                        PriorityLevel.Medium => "Orta",
-                        PriorityLevel.High=> "Yüksek",
-                        _ => "Bilinmiyor"
-                    };
-                }
-                @priorityText</td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@plan.PlanId" class="btn btn-primary">Düzenle</a>
-                <form asp-action="Delete" asp-route-id="@plan.PlanId" method="post" style="display:inline;">
-                    <button class="btn btn-danger" onclick="return confirm('Silinsin mi?');">Sil</button>
+            }
+        </div>
+    </div>
+}
+</div>
+
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content pastel-modal">
+            <div class="modal-header border-0">
+                <h5 class="modal-title" id="confirmDeleteLabel">Planı Silmek İstiyor musunuz?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    <span id="deleteModalPlanTitle" style="color:#2196bf;font-weight:600;"></span> planını silmek istediğinize emin misiniz?
+                </p>
+            </div>
+            <div class="modal-footer border-0 justify-content-center">
+                <form id="deleteModalForm" method="post">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn delete-btn-delete">Evet, Sil</button>
                 </form>
-            </td>
-        </tr>
-    }
-    </tbody>
-</table>
+                <button type="button" class="btn delete-btn-cancel" data-bs-dismiss="modal">Vazgeç</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    <script>
+    $(function () {
+        $(".kanban-card").draggable({
+            revert: "invalid",
+            helper: "clone",
+            start: function () {
+                $(this).css("opacity", "0.45");
+            },
+            stop: function () {
+                $(this).css("opacity", "1");
+            }
+        });
+
+        $(".kanban-column").droppable({
+            accept: ".kanban-card",
+            tolerance: "pointer",
+            hoverClass: "kanban-column-hover",
+            drop: function (event, ui) {
+                var planId = ui.draggable.data("id");
+                var targetColumn = $(this);
+                var sourceColumn = ui.draggable.closest(".kanban-column");
+                var newStatus = targetColumn.data("status");
+                var token = $('input[name="__RequestVerificationToken"]').first().val();
+
+                if (sourceColumn.is(targetColumn)) return;
+
+                $.ajax({
+                    url: "/Plan/ChangeStatus",
+                    method: "POST",
+                    data: { planId: planId, status: newStatus, __RequestVerificationToken: token },
+                    success: function () {
+                        var card = ui.draggable;
+                        var targetList = targetColumn.find(".kanban-card-list");
+
+                        targetList.find(".kanban-empty-placeholder").remove();
+                        card.detach().css({ top: 0, left: 0 }).appendTo(targetList);
+
+                        if (sourceColumn.find(".kanban-card").length === 0) {
+                            sourceColumn.find(".kanban-card-list")
+                                .append('<div class="kanban-empty-placeholder">Burada plan yok.</div>');
+                        }
+
+                        sourceColumn.find(".kanban-header-count")
+                            .text(sourceColumn.find(".kanban-card").length);
+                        targetColumn.find(".kanban-header-count")
+                            .text(targetColumn.find(".kanban-card").length);
+                    },
+                    error: function () {
+                        alert("Durum güncellenirken bir hata oluştu.");
+                    }
+                });
+            }
+        });
+
+        $("#confirmDeleteModal").on("show.bs.modal", function (event) {
+            var button = $(event.relatedTarget);
+            $("#deleteModalPlanTitle").text(button.data("title"));
+            $("#deleteModalForm").attr("action", "/Plan/Delete/" + button.data("id"));
+        });
+    });
+    </script>
+}

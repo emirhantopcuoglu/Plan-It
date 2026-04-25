@@ -9,5 +9,7 @@ namespace Plan_It.Services
         Task<bool> CreatePlanAsync(PlanViewModel model, string userId);
         Task<bool> UpdatePlanAsync(PlanViewModel model, string userId);
         Task<bool> DeletePlanAsync(int id, string userId);
+
+        Task ChangePlanStatusAsync(int planId, string userId, PlanStatus status);
     }
 }

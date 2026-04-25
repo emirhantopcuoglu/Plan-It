@@ -1,21 +1,39 @@
 ﻿@page
 @model LogoutModel
 @{
-    ViewData["Title"] = "Log out";
+    ViewData["Title"] = "Çıkış Yap";
+    var isAuthenticated = User.Identity?.IsAuthenticated ?? false;
 }
+<link href="~/css/logout.css" rel="stylesheet" />
+<div class="logout-kanban-bg d-flex align-items-center justify-content-center">
+    <div class="logout-kanban-card shadow-lg p-5 text-center">
+        <div class="mb-4">
+            <i class="bi bi-box-arrow-right" style="font-size: 2.9rem; color: #ef476f;"></i>
+        </div>
+        <h2 class="fw-bold mb-3" style="color:#215067;">@ViewData["Title"]</h2>
 
-<header>
-    <h1>@ViewData["Title"]</h1>
-    @{
-        if (User.Identity?.IsAuthenticated ?? false)
+        @if (isAuthenticated)
         {
-            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
-                <button type="submit" class="nav-link btn btn-link text-dark">Click here to Logout</button>
+            <form class="d-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                <button type="submit" class="btn logout-main-btn btn-lg px-4 mb-3">
+                    <i class="bi bi-box-arrow-right"></i> Çıkış Yap
+                </button>
             </form>
         }
         else
         {
-            <p>You have successfully logged out of the application.</p>
+            <div class="alert alert-success mb-4 mt-2" style="font-size:1.1em;">
+                <i class="bi bi-check-circle-fill"></i>
+                Başarıyla çıkış yaptınız.
+            </div>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="@Url.Page("/Account/Login", new { area = "Identity" })" class="btn btn-outline-primary px-4">
+                    <i class="bi bi-box-arrow-in-right"></i> Giriş Yap
+                </a>
+                <a href="@Url.Page("/", new { area = "" })" class="btn btn-outline-success px-4">
+                    <i class="bi bi-house"></i> Anasayfa
+                </a>
+            </div>
         }
-    }
-</header>
+    </div>
+</div>

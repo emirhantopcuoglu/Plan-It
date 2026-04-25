@@ -1,88 +1,83 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Plan_It.Models;
-using Plan_It.Repository;
 using Plan_It.Services;
 
-[Authorize(Roles = "Admin")]
-public class CategoryController : Controller
+namespace Plan_It.Controllers
 {
-    private readonly ICategoryService _categoryService;
-
-    public CategoryController(ICategoryService categoryService)
+    [Authorize(Roles = "Admin")]
+    public class CategoryController : Controller
     {
-        _categoryService = categoryService;
-    }
+        private readonly ICategoryService _categoryService;
 
-    public async Task<IActionResult> Index()
-    {
-        var categories = await _categoryService.GetAllCategoriesAsync();
-        return View(categories);
-    }
-
-    [HttpGet]
-    public IActionResult Create()
-    {
-        return View();
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> Create(Category category)
-    {
-        if (ModelState.IsValid)
+        public CategoryController(ICategoryService categoryService)
         {
+            _categoryService = categoryService;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var categories = await _categoryService.GetAllCategoriesAsync();
+            return View(categories);
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Category category)
+        {
+            if (!ModelState.IsValid)
+                return View(category);
+
             await _categoryService.CreateCategoryAsync(category);
             return RedirectToAction(nameof(Index));
         }
 
-        return View(category);
-    }
-
-    [HttpGet]
-    public async Task<IActionResult> Edit(int id)
-    {
-        var category = await _categoryService.GetCategoryByIdAsync(id);
-        if (category == null)
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
         {
-            return NotFound();
+            var category = await _categoryService.GetCategoryByIdAsync(id);
+            if (category == null)
+                return NotFound();
+
+            return View(category);
         }
 
-        return View(category);
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> Edit(int id, Category category)
-    {
-        if (id != category.CategoryId)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, Category category)
         {
-            return BadRequest();
-        }
+            if (id != category.CategoryId)
+                return BadRequest();
 
-        if (ModelState.IsValid)
-        {
+            if (!ModelState.IsValid)
+                return View(category);
+
             await _categoryService.UpdateCategoryAsync(category);
             return RedirectToAction(nameof(Index));
         }
 
-        return View(category);
-    }
-
-    [HttpGet]
-    public async Task<IActionResult> Delete(int id)
-    {
-        var category = await _categoryService.GetCategoryByIdAsync(id);
-        if (category == null)
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
         {
-            return NotFound();
+            var category = await _categoryService.GetCategoryByIdAsync(id);
+            if (category == null)
+                return NotFound();
+
+            return View(category);
         }
 
-        return View(category);
-    }
-
-    [HttpPost, ActionName("Delete")]
-    public async Task<IActionResult> DeleteConfirmed(int id)
-    {
-        await _categoryService.DeleteCategoryAsync(id);
-        return RedirectToAction(nameof(Index));
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            await _categoryService.DeleteCategoryAsync(id);
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
