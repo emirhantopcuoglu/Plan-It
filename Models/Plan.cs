@@ -12,7 +12,7 @@ namespace Plan_It.Models
         public int PlanId { get; set; }
 
         [Required(ErrorMessage = "Başlık zorunludur.")]
-        [StringLength(50, ErrorMessage = "Başlık en fazla 50 karakter olabilir.")]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "Başlık 2-50 karakter arasında olmalıdır.")]
         [DisplayName("Başlık")]
         public string Title { get; set; } = string.Empty;
 
@@ -34,7 +34,7 @@ namespace Plan_It.Models
         public Category? Category { get; set; }
 
         [Required]
-        public string UserId { get; set; }
+        public string UserId { get; set; } = string.Empty;
 
         [ForeignKey(nameof(UserId))]
         public IdentityUser? User { get; set; }

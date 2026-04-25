@@ -1,24 +1,60 @@
 @model IEnumerable<Category>
+@{
+    ViewData["Title"] = "Kategoriler";
+}
 
-<h2>Kategoriler</h2>
-<a class="btn btn-primary" asp-action="Create">Yeni Kategori Ekle</a>
+<div class="kb-toolbar">
+    <div class="kb-heading">
+        <h1>Kategoriler</h1>
+        <p>Toplam @Model.Count() kategori · planlar bunlara atanır</p>
+    </div>
+    <a asp-action="Create" class="btn-pi btn-primary-pi">
+        <i class="bi bi-plus-lg"></i>Yeni Kategori
+    </a>
+</div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Ad</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.Name</td>
-                <td>
-                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.CategoryId">Sil</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+@if (!Model.Any())
+{
+    <div class="kb-empty-board">
+        <i class="bi bi-tags"></i>
+        <h3>Hiç kategori yok</h3>
+        <p>Planlarını gruplayabilmek için en az bir kategori oluştur.</p>
+        <a asp-action="Create" class="btn-pi btn-primary-pi">
+            <i class="bi bi-plus-lg"></i>İlk kategorini oluştur
+        </a>
+    </div>
+}
+else
+{
+    <div class="card-pi" style="padding:0;">
+        <table class="table mb-0" style="margin:0;">
+            <thead>
+                <tr>
+                    <th style="padding:14px 22px;">Kategori Adı</th>
+                    <th style="padding:14px 22px;width:1%;white-space:nowrap;text-align:right;">İşlemler</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td style="padding:14px 22px;font-weight:500;">
+                            <i class="bi bi-tag-fill" style="color:var(--brand);margin-right:8px;"></i>
+                            @item.Name
+                        </td>
+                        <td style="padding:10px 22px;text-align:right;">
+                            <a asp-action="Edit" asp-route-id="@item.CategoryId"
+                               class="btn-pi btn-ghost-pi btn-sm-pi">
+                                <i class="bi bi-pencil"></i>Düzenle
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@item.CategoryId"
+                               class="btn-pi btn-ghost-pi btn-sm-pi" style="color:var(--danger);">
+                                <i class="bi bi-trash"></i>Sil
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

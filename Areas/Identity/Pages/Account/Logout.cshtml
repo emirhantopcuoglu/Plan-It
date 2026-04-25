@@ -1,21 +1,43 @@
-﻿@page
+@page
 @model LogoutModel
 @{
-    ViewData["Title"] = "Log out";
+    ViewData["Title"] = "Çıkış";
+    var isAuthenticated = User.Identity?.IsAuthenticated ?? false;
 }
+<link href="~/css/auth.css" rel="stylesheet" asp-append-version="true" />
 
-<header>
-    <h1>@ViewData["Title"]</h1>
-    @{
-        if (User.Identity?.IsAuthenticated ?? false)
+<div class="auth-shell">
+    <div class="auth-card">
+        @if (isAuthenticated)
         {
-            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
-                <button type="submit" class="nav-link btn btn-link text-dark">Click here to Logout</button>
+            <div class="auth-head">
+                <div class="auth-icon" style="background:var(--danger-soft);color:var(--danger);">
+                    <i class="bi bi-box-arrow-right"></i>
+                </div>
+                <h1>Çıkış yap</h1>
+                <p class="auth-sub">Oturumu sonlandırmak istediğine emin misin?</p>
+            </div>
+            <form asp-area="Identity" asp-page="/Account/Logout"
+                  asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                <button type="submit" class="btn-pi btn-danger-pi w-100">
+                    <i class="bi bi-box-arrow-right"></i>Çıkış Yap
+                </button>
             </form>
         }
         else
         {
-            <p>You have successfully logged out of the application.</p>
+            <div class="logout-confirmed">
+                <i class="bi bi-check-circle-fill"></i>Başarıyla çıkış yaptın.
+            </div>
+            <div class="d-flex gap-2">
+                <a href="@Url.Page("/", new { area = "" })" class="btn-pi btn-secondary-pi w-100">
+                    <i class="bi bi-house"></i>Anasayfa
+                </a>
+                <a href="@Url.Page("/Account/Login", new { area = "Identity" })"
+                   class="btn-pi btn-primary-pi w-100">
+                    <i class="bi bi-box-arrow-in-right"></i>Tekrar Giriş
+                </a>
+            </div>
         }
-    }
-</header>
+    </div>
+</div>

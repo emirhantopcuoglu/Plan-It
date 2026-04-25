@@ -1,69 +1,95 @@
-# Tüm wwwroot klasörünü hariç tut
-wwwroot/
+# ──────────────────────────────────────────────────────────
+# Build & intermediate output
+# ──────────────────────────────────────────────────────────
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa]rtifacts/
+[Bb]uild[Ll]og.*
+*.binlog
 
-## Windows işletim sistemi dosyaları
-Thumbs.db
-ehthumbs.db
-Desktop.ini
-$RECYCLE.BIN/
-
-## Visual Studio dosyaları
+# ──────────────────────────────────────────────────────────
+# IDE — Visual Studio / Rider / VS Code
+# ──────────────────────────────────────────────────────────
 .vs/
+.vscode/
+.idea/
 *.suo
 *.user
 *.userosscache
 *.sln.docstates
+*.csproj.user
+*.DotSettings.user
+*.swp
+*.swo
+*~
 
-## Build sonuçları
-bin/
-obj/
-*.dll
-*.pdb
-*.exe
-*.appx
-*.dbmdl
-*.log
-*.jfm
+# ──────────────────────────────────────────────────────────
+# Claude / AI tooling
+# ──────────────────────────────────────────────────────────
+.claude/
 
-## Paket yönetim dosyaları
-node_modules/
-bower_components/
+# ──────────────────────────────────────────────────────────
+# OS-generated files
+# ──────────────────────────────────────────────────────────
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+$RECYCLE.BIN/
 
-## ASP.NET yayınlama dosyaları
-*.publishsettings
+# ──────────────────────────────────────────────────────────
+# Secrets & environment-specific configuration
+# ──────────────────────────────────────────────────────────
+appsettings.Development.json
+appsettings.Production.json
+appsettings.Local.json
+secrets.json
+*.pfx
+*.key
+
+# ──────────────────────────────────────────────────────────
+# SQLite — local database artefacts
+# ──────────────────────────────────────────────────────────
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# ──────────────────────────────────────────────────────────
+# Publish output
+# ──────────────────────────────────────────────────────────
+publish/
+PublishProfiles/
 *.pubxml
 *.pubxml.user
+*.publishsettings
+*.azurePubxml
 
-## Geliştirme araçları dosyaları
-project.lock.json
-project.fragment.lock.json
-artifacts/
-
-## Log ve hata raporlama dosyaları
-*.stackdump
-*.log
-*.dmp
-
-## Resharper ve benzeri araçların dosyaları
-_ReSharper*/
-*.DotSettings.user
-
-## Web yapılandırma dosyaları
-appsettings.json
-appsettings.*.json
-web.config
-web.*.config
-
-## Temp dosyalar
-*.tmp
-*.temp
-*.cache
-
-## Paket yönetimi için üretilen dosyalar
+# ──────────────────────────────────────────────────────────
+# Package management & vendored dependencies
+# ──────────────────────────────────────────────────────────
+node_modules/
 packages/
 *.nupkg
 *.nuspec
+project.lock.json
+project.fragment.lock.json
 
-## Geriye dönük uyumluluk dosyaları
-*.csproj.user
-*.vbproj.user
+# Static assets fetched via libman / CDN — installed at build time
+wwwroot/lib/
+
+# ──────────────────────────────────────────────────────────
+# Logs, crashes, temp
+# ──────────────────────────────────────────────────────────
+*.log
+*.stackdump
+*.dmp
+*.tmp
+*.temp
+*.cache

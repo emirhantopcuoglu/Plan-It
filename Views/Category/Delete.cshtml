@@ -1,10 +1,22 @@
 @model Category
+@{
+    ViewData["Title"] = "Kategoriyi Sil";
+}
 
-<h2>Kategori Sil</h2>
-<p>Gerçekten <strong>@Model.Name</strong> kategorisini silmek istiyor musunuz?</p>
+<form asp-action="Delete" asp-route-id="@Model.CategoryId" method="post" class="form-pi">
+    @Html.AntiForgeryToken()
 
-<form asp-action="Delete">
-    <input type="hidden" asp-for="CategoryId" />
-    <button type="submit" class="btn btn-danger">Sil</button>
-    <a asp-action="Index" class="btn btn-secondary">İptal</a>
+    <div class="form-pi-title" style="color:var(--danger);">Kategoriyi Sil</div>
+    <p class="form-pi-sub">
+        <strong>@Model.Name</strong> kategorisini silmek üzeresin.
+        Bu kategoriye atanmış planlar silinmez ama referansları boşa düşer.
+        İşlem geri alınamaz.
+    </p>
+
+    <div class="form-actions-pi">
+        <a asp-action="Index" class="btn-pi btn-secondary-pi">Vazgeç</a>
+        <button type="submit" class="btn-pi btn-danger-pi">
+            <i class="bi bi-trash"></i>Evet, Sil
+        </button>
+    </div>
 </form>

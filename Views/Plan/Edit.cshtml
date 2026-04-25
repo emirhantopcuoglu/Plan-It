@@ -1,33 +1,54 @@
 @model PlanViewModel
+@{
+    ViewData["Title"] = "Planı Düzenle";
+}
 
-<h2>Planı Düzenle</h2>
-
-<form asp-action="Edit" method="post">
+<form asp-action="Edit" method="post" autocomplete="off" class="form-pi">
+    @Html.AntiForgeryToken()
     <input type="hidden" asp-for="PlanId" />
 
-    <div class="form-group">
-        <label>Başlık</label>
-        <input asp-for="Title" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label>Teslim Tarihi</label>
-        <input asp-for="Deadline" type="date" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label>Kategori</label>
-        <select asp-for="CategoryId" class="form-control" asp-items="Model.Categories"></select>
-    </div>
-    <div class="form-group">
-        <label>Durum</label>
-        <select asp-for="Status" class="form-control" asp-items="Html.GetEnumSelectList<PlanStatus>()"></select>
-    </div>
-    <div class="form-group">
-        <label for="Priority">Öncelik</label>
-        <select asp-for="Priority" class="form-control" asp-items="new SelectList(ViewBag.Priorities)">
-            <option value="">Seçiniz</option>
-        </select>
+    <div class="form-pi-title">Planı Düzenle</div>
+    <p class="form-pi-sub">Bilgileri güncelle, kaydet.</p>
+
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+    <div class="form-group-pi">
+        <label asp-for="Title" class="form-label-pi"></label>
+        <input asp-for="Title" class="form-control-pi" maxlength="50" />
+        <span asp-validation-for="Title" class="field-error"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">Güncelle</button>
-    <a asp-action="Index" class="btn btn-secondary">İptal</a>
+    <div class="form-group-pi">
+        <label asp-for="Deadline" class="form-label-pi"></label>
+        <input asp-for="Deadline" type="date" class="form-control-pi" />
+        <span asp-validation-for="Deadline" class="field-error"></span>
+    </div>
+
+    <div class="form-group-pi">
+        <label asp-for="CategoryId" class="form-label-pi"></label>
+        <select asp-for="CategoryId" class="form-control-pi" asp-items="Model.Categories"></select>
+        <span asp-validation-for="CategoryId" class="field-error"></span>
+    </div>
+
+    <div class="form-group-pi">
+        <label asp-for="Status" class="form-label-pi"></label>
+        <select asp-for="Status" class="form-control-pi" asp-items="Html.GetEnumSelectList<PlanStatus>()"></select>
+    </div>
+
+    <div class="form-group-pi">
+        <label asp-for="Priority" class="form-label-pi"></label>
+        <select asp-for="Priority" class="form-control-pi" asp-items="Html.GetEnumSelectList<PriorityLevel>()"></select>
+        <span asp-validation-for="Priority" class="field-error"></span>
+    </div>
+
+    <div class="form-actions-pi">
+        <a asp-action="Index" class="btn-pi btn-secondary-pi">Vazgeç</a>
+        <button type="submit" class="btn-pi btn-primary-pi">
+            <i class="bi bi-check2"></i>Güncelle
+        </button>
+    </div>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

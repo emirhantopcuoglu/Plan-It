@@ -1,0 +1,187 @@
+/* ── Kanban — header / toolbar ───────────────────────────── */
+.kb-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.kb-heading h1 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin: 0 0 4px;
+}
+
+.kb-heading p {
+    color: var(--text-secondary);
+    margin: 0;
+    font-size: 0.92rem;
+}
+
+/* ── Kanban — board layout ───────────────────────────────── */
+.kb-board {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(260px, 1fr));
+    gap: 16px;
+    align-items: start;
+}
+
+.kb-column {
+    background: var(--surface-muted);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 12px;
+    min-height: 220px;
+    transition: background 0.15s var(--ease), border-color 0.15s var(--ease);
+}
+
+.kb-column-hover {
+    background: var(--brand-soft);
+    border-color: var(--brand);
+    border-style: dashed;
+}
+
+.kb-column-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 6px 12px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 10px;
+}
+
+.kb-column-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.kb-column-title {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    flex: 1;
+}
+
+.kb-column-count {
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    font-size: 0.74rem;
+    font-weight: 600;
+    padding: 1px 8px;
+    border-radius: 999px;
+    min-width: 24px;
+    text-align: center;
+}
+
+/* Status colors — only in the dot, kept minimal */
+.kb-column[data-status-key="NotStarted"] .kb-column-dot { background: #94a3b8; }
+.kb-column[data-status-key="InProgress"] .kb-column-dot { background: var(--brand); }
+.kb-column[data-status-key="Completed"]  .kb-column-dot { background: var(--success); }
+.kb-column[data-status-key="Cancelled"]  .kb-column-dot { background: var(--danger);  }
+
+/* ── Kanban — cards ──────────────────────────────────────── */
+.kb-card-list {
+    min-height: 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.kb-card {
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 13px;
+    cursor: grab;
+    box-shadow: var(--shadow-sm);
+    transition: border-color 0.15s var(--ease), box-shadow 0.15s var(--ease), transform 0.1s var(--ease);
+}
+
+.kb-card:hover {
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow);
+}
+
+.kb-card:active { cursor: grabbing; }
+
+.kb-card.ui-draggable-dragging {
+    box-shadow: var(--shadow-lg);
+    transform: rotate(1.5deg);
+    border-color: var(--brand);
+}
+
+.kb-card-title {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    line-height: 1.35;
+    word-break: break-word;
+}
+
+.kb-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.kb-card-meta .badge-pi i { font-size: 0.78rem; }
+
+.kb-card-actions {
+    display: flex;
+    gap: 6px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+}
+
+/* Empty state */
+.kb-empty {
+    padding: 14px 0;
+    color: var(--text-muted);
+    font-size: 0.84rem;
+    text-align: center;
+    font-style: italic;
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius-sm);
+    margin-top: 4px;
+}
+
+/* Empty board state */
+.kb-empty-board {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 64px 24px;
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    color: var(--text-secondary);
+}
+
+.kb-empty-board i {
+    font-size: 2.5rem;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    display: block;
+}
+
+.kb-empty-board h3 { color: var(--text-primary); font-size: 1.1rem; margin-bottom: 6px; }
+.kb-empty-board p  { margin-bottom: 18px; max-width: 360px; margin-left: auto; margin-right: auto; }
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 1100px) {
+    .kb-board { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+    .kb-board { grid-template-columns: 1fr; }
+}

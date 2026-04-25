@@ -9,6 +9,8 @@ namespace Plan_It.Repository
         Task AddAsync(Plan plan);
         Task UpdateAsync(Plan plan);
         Task DeleteAsync(Plan plan);
+
+        Task UpdateStatusAsync(int planId, string userId, PlanStatus status);
     }
 
 }
