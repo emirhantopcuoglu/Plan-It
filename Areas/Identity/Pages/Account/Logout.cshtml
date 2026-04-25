@@ -1,37 +1,41 @@
-﻿@page
+@page
 @model LogoutModel
 @{
-    ViewData["Title"] = "Çıkış Yap";
+    ViewData["Title"] = "Çıkış";
     var isAuthenticated = User.Identity?.IsAuthenticated ?? false;
 }
-<link href="~/css/logout.css" rel="stylesheet" />
-<div class="logout-kanban-bg d-flex align-items-center justify-content-center">
-    <div class="logout-kanban-card shadow-lg p-5 text-center">
-        <div class="mb-4">
-            <i class="bi bi-box-arrow-right" style="font-size: 2.9rem; color: #ef476f;"></i>
-        </div>
-        <h2 class="fw-bold mb-3" style="color:#215067;">@ViewData["Title"]</h2>
+<link href="~/css/auth.css" rel="stylesheet" asp-append-version="true" />
 
+<div class="auth-shell">
+    <div class="auth-card">
         @if (isAuthenticated)
         {
-            <form class="d-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
-                <button type="submit" class="btn logout-main-btn btn-lg px-4 mb-3">
-                    <i class="bi bi-box-arrow-right"></i> Çıkış Yap
+            <div class="auth-head">
+                <div class="auth-icon" style="background:var(--danger-soft);color:var(--danger);">
+                    <i class="bi bi-box-arrow-right"></i>
+                </div>
+                <h1>Çıkış yap</h1>
+                <p class="auth-sub">Oturumu sonlandırmak istediğine emin misin?</p>
+            </div>
+            <form asp-area="Identity" asp-page="/Account/Logout"
+                  asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                <button type="submit" class="btn-pi btn-danger-pi w-100">
+                    <i class="bi bi-box-arrow-right"></i>Çıkış Yap
                 </button>
             </form>
         }
         else
         {
-            <div class="alert alert-success mb-4 mt-2" style="font-size:1.1em;">
-                <i class="bi bi-check-circle-fill"></i>
-                Başarıyla çıkış yaptınız.
+            <div class="logout-confirmed">
+                <i class="bi bi-check-circle-fill"></i>Başarıyla çıkış yaptın.
             </div>
-            <div class="d-flex justify-content-center gap-3">
-                <a href="@Url.Page("/Account/Login", new { area = "Identity" })" class="btn btn-outline-primary px-4">
-                    <i class="bi bi-box-arrow-in-right"></i> Giriş Yap
+            <div class="d-flex gap-2">
+                <a href="@Url.Page("/", new { area = "" })" class="btn-pi btn-secondary-pi w-100">
+                    <i class="bi bi-house"></i>Anasayfa
                 </a>
-                <a href="@Url.Page("/", new { area = "" })" class="btn btn-outline-success px-4">
-                    <i class="bi bi-house"></i> Anasayfa
+                <a href="@Url.Page("/Account/Login", new { area = "Identity" })"
+                   class="btn-pi btn-primary-pi w-100">
+                    <i class="bi bi-box-arrow-in-right"></i>Tekrar Giriş
                 </a>
             </div>
         }

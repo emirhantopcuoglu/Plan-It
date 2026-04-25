@@ -1,52 +1,62 @@
-﻿@page
+@page
 @model RegisterModel
 @{
     ViewData["Title"] = "Kayıt Ol";
 }
-<link href="~/css/register.css" rel="stylesheet" />
-<div class="register-kanban-bg d-flex align-items-center justify-content-center">
-    <div class="register-kanban-card shadow-lg p-4 p-md-5">
-        <div class="text-center mb-4">
-            <i class="bi bi-person-plus-fill" style="font-size: 2.7rem; color: #7be495;"></i>
-            <h2 class="fw-bold mb-2 mt-2" style="color: #215067;">Kayıt Ol</h2>
-            <div class="small text-muted mb-2">Planlarını oluşturmaya hemen başlamak için hesabını oluştur.</div>
+<link href="~/css/auth.css" rel="stylesheet" asp-append-version="true" />
+
+<div class="auth-shell">
+    <div class="auth-card">
+        <div class="auth-head">
+            <div class="auth-icon"><i class="bi bi-person-plus"></i></div>
+            <h1>Hesap oluştur</h1>
+            <p class="auth-sub">30 saniyede bitir, planlamaya başla.</p>
         </div>
+
         <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger text-center mb-2" role="alert"></div>
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-2 small" role="alert"></div>
+
             <div class="form-floating mb-3">
                 <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="E-posta" />
                 <label asp-for="Input.Email">E-posta</label>
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
+                <span asp-validation-for="Input.Email" class="field-error"></span>
             </div>
+
             <div class="form-floating mb-3">
                 <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Şifre" />
                 <label asp-for="Input.Password">Şifre</label>
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
+                <span asp-validation-for="Input.Password" class="field-error"></span>
             </div>
+
             <div class="form-floating mb-3">
-                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Şifreyi tekrar girin" />
-                <label asp-for="Input.ConfirmPassword">Şifre (Tekrar)</label>
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Şifre (tekrar)" />
+                <label asp-for="Input.ConfirmPassword">Şifre (tekrar)</label>
+                <span asp-validation-for="Input.ConfirmPassword" class="field-error"></span>
             </div>
-            <button id="registerSubmit" type="submit" class="w-100 btn register-main-btn mb-2">Kayıt Ol</button>
-            <div class="text-center mt-2">
-                <span class="small text-muted">Zaten bir hesabın var mı?</span>
-                <a  asp-area="Identity" asp-page="/Account/Login" class="small ms-2" style="color:#5fbcff;font-weight:600;">Giriş Yap</a>
-            </div>
+
+            <button id="registerSubmit" type="submit" class="btn-pi btn-primary-pi">
+                Kayıt Ol
+            </button>
         </form>
+
         @if ((Model.ExternalLogins?.Count ?? 0) > 0)
         {
-            <hr class="my-4"/>
-            <div class="text-center mb-2 text-muted">veya sosyal hesap ile kayıt ol</div>
+            <div class="auth-divider">veya</div>
             <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post">
                 @foreach (var provider in Model.ExternalLogins!)
                 {
-                    <button type="submit" class="btn btn-outline-primary w-100 mb-2" name="provider" value="@provider.Name">
-                        <i class="bi bi-box-arrow-in-right me-2"></i> @provider.DisplayName ile devam et
+                    <button type="submit" class="btn-pi btn-secondary-pi w-100 mb-2"
+                            name="provider" value="@provider.Name">
+                        <i class="bi bi-box-arrow-in-right"></i>@provider.DisplayName
                     </button>
                 }
             </form>
         }
+
+        <div class="auth-foot">
+            Hesabın var mı?
+            <a asp-area="Identity" asp-page="/Account/Login">Giriş yap</a>
+        </div>
     </div>
 </div>
 

@@ -1,27 +1,27 @@
 @model Category
 @{
-    ViewData["Title"] = "Yeni Kategori";
+    ViewData["Title"] = "Kategoriyi Düzenle";
 }
 
-<form asp-action="Create" method="post" class="form-pi">
+<form asp-action="Edit" method="post" class="form-pi">
     @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="CategoryId" />
 
-    <div class="form-pi-title">Yeni Kategori</div>
-    <p class="form-pi-sub">Planlarını gruplayabilmen için bir kategori adı gir.</p>
+    <div class="form-pi-title">Kategoriyi Düzenle</div>
+    <p class="form-pi-sub">Kategori adını güncelle.</p>
 
     <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
 
     <div class="form-group-pi">
         <label asp-for="Name" class="form-label-pi"></label>
-        <input asp-for="Name" class="form-control-pi" maxlength="40"
-               placeholder="Örn: İş, Kişisel, Eğitim" />
+        <input asp-for="Name" class="form-control-pi" maxlength="40" />
         <span asp-validation-for="Name" class="field-error"></span>
     </div>
 
     <div class="form-actions-pi">
         <a asp-action="Index" class="btn-pi btn-secondary-pi">Vazgeç</a>
         <button type="submit" class="btn-pi btn-primary-pi">
-            <i class="bi bi-check2"></i>Kaydet
+            <i class="bi bi-check2"></i>Güncelle
         </button>
     </div>
 </form>

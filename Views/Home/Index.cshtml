@@ -1,105 +1,138 @@
 @{
-    ViewData["Title"] = "Plan-It – Akıllı Plan Yönetimi";
+    ViewData["Title"] = "Plan-It";
     var isAuthenticated = User.Identity?.IsAuthenticated ?? false;
 }
-<link href="~/css/welcome.css" rel="stylesheet" />
+<link href="~/css/landing.css" rel="stylesheet" asp-append-version="true" />
 
 @if (isAuthenticated)
 {
-    <div class="hero-section hero-compact">
-        <div class="hero-text">
-            <div class="hero-badge">✦ Hoşgeldiniz</div>
-            <h1 class="hero-title">Planlarınız sizi bekliyor.</h1>
-            <p class="hero-sub">
-                Devam eden görevlerinizi takip edin, yeni planlar oluşturun ve hedeflerinize odaklanın.
-            </p>
-            <div class="hero-ctas" style="justify-content:center;">
-                <a asp-controller="Plan" asp-action="Index" class="btn btn-hero-primary">
-                    <i class="bi bi-kanban me-2"></i>Planlarıma Git
-                </a>
-                <a asp-controller="Plan" asp-action="Create" class="btn btn-hero-secondary">
-                    <i class="bi bi-plus-circle me-2"></i>Yeni Plan Oluştur
-                </a>
-            </div>
+    <section class="lp-welcome">
+        <h1>Hoş geldin, @User.Identity!.Name?.Split('@')[0] 👋</h1>
+        <p>Pano seni bekliyor. Hadi devam edelim.</p>
+        <div class="lp-ctas" style="justify-content:center;">
+            <a asp-controller="Plan" asp-action="Index" class="btn-pi btn-primary-pi btn-lg-pi">
+                <i class="bi bi-kanban"></i>Panoya Git
+            </a>
+            <a asp-controller="Plan" asp-action="Create" class="btn-pi btn-secondary-pi btn-lg-pi">
+                <i class="bi bi-plus-lg"></i>Yeni Plan
+            </a>
         </div>
-    </div>
+    </section>
 }
 else
 {
-    <div class="hero-section">
-        <div class="hero-content">
-            <div class="hero-text">
-                <div class="hero-badge">✦ Ücretsiz &amp; Açık Kaynak</div>
-                <h1 class="hero-title">
-                    Planlarını yönet,<br />
-                    <span class="hero-accent">hedeflerine ulaş.</span>
-                </h1>
-                <p class="hero-sub">
-                    Plan-It ile görevlerini Kanban panosu üzerinden takip et,
-                    öncelik sırala ve son tarihlerini asla kaçırma.
-                </p>
-                <div class="hero-ctas">
-                    <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-hero-primary">
-                        Ücretsiz Başla
-                    </a>
-                    <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-hero-secondary">
-                        Giriş Yap
-                    </a>
-                </div>
+    <section class="lp-hero">
+        <div>
+            <span class="lp-eyebrow">
+                <span class="dot"></span>Ücretsiz · Açık kaynak
+            </span>
+            <h1 class="lp-title">
+                Planlarını yönet,<br />
+                <span class="accent">odakta kal.</span>
+            </h1>
+            <p class="lp-sub">
+                Plan-It, görevlerini Kanban panosuyla takip etmeni sağlayan
+                sade ve hızlı bir uygulama. Sürükle-bırak, öncelik ve son tarih —
+                fazlası değil.
+            </p>
+            <div class="lp-ctas">
+                <a asp-area="Identity" asp-page="/Account/Register"
+                   class="btn-pi btn-primary-pi btn-lg-pi">
+                    Hemen Başla<i class="bi bi-arrow-right"></i>
+                </a>
+                <a asp-area="Identity" asp-page="/Account/Login"
+                   class="btn-pi btn-secondary-pi btn-lg-pi">
+                    Giriş Yap
+                </a>
             </div>
+            <div class="lp-trust">
+                <span class="lp-trust-item"><i class="bi bi-check-circle-fill"></i>Kredi kartı yok</span>
+                <span class="lp-trust-item"><i class="bi bi-check-circle-fill"></i>30 saniyede kayıt</span>
+            </div>
+        </div>
 
-            <div class="hero-visual">
-                <div class="mock-kanban">
-                    <div class="mock-col mock-col-blue">
-                        <div class="mock-col-header">🔄 Devam Ediyor</div>
-                        <div class="mock-card">
-                            <div class="mock-card-title">Proje raporu</div>
-                            <span class="mock-card-badge high">Yüksek</span>
-                        </div>
-                        <div class="mock-card">
-                            <div class="mock-card-title">Tasarım revizyonu</div>
-                            <span class="mock-card-badge medium">Orta</span>
+        <div class="lp-mock" aria-hidden="true">
+            <div class="lp-mock-bar">
+                <span class="lp-mock-dot"></span>
+                <span class="lp-mock-dot"></span>
+                <span class="lp-mock-dot"></span>
+            </div>
+            <div class="lp-mock-cols">
+                <div class="lp-mock-col">
+                    <div class="lp-mock-col-title">Yapılacak</div>
+                    <div class="lp-mock-card">
+                        <div class="lp-mock-card-title">Müşteri sunumu</div>
+                        <div class="lp-mock-card-meta">
+                            <span class="badge-pi badge-warning">Orta</span>
                         </div>
                     </div>
-                    <div class="mock-col mock-col-green">
-                        <div class="mock-col-header">✅ Tamamlandı</div>
-                        <div class="mock-card">
-                            <div class="mock-card-title">Sprint planlama</div>
-                            <span class="mock-card-badge low">Düşük</span>
+                </div>
+                <div class="lp-mock-col">
+                    <div class="lp-mock-col-title">Devam</div>
+                    <div class="lp-mock-card">
+                        <div class="lp-mock-card-title">API entegrasyonu</div>
+                        <div class="lp-mock-card-meta">
+                            <span class="badge-pi badge-danger">Yüksek</span>
                         </div>
-                        <div class="mock-card">
-                            <div class="mock-card-title">API entegrasyonu</div>
-                            <span class="mock-card-badge medium">Orta</span>
+                    </div>
+                    <div class="lp-mock-card">
+                        <div class="lp-mock-card-title">Tasarım revizyonu</div>
+                        <div class="lp-mock-card-meta">
+                            <span class="badge-pi badge-info">Düşük</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="lp-mock-col">
+                    <div class="lp-mock-col-title">Bitti</div>
+                    <div class="lp-mock-card">
+                        <div class="lp-mock-card-title">Sprint planlama</div>
+                        <div class="lp-mock-card-meta">
+                            <span class="badge-pi badge-success">Tamam</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <div class="features-section">
-        <h2 class="features-title">Neden Plan-It?</h2>
-        <div class="features-grid">
-            <div class="feature-card">
-                <span class="feature-icon">🗂️</span>
+    <section class="lp-features">
+        <header class="lp-section-head">
+            <div class="lp-section-eyebrow">Özellikler</div>
+            <h2 class="lp-section-title">İşini kolaylaştıran 4 özellik</h2>
+            <p class="lp-section-sub">
+                Sade arayüz, güçlü temel — hızlıca planla, öncelikle, bitir.
+            </p>
+        </header>
+
+        <div class="lp-feature-grid">
+            <article class="lp-feature">
+                <span class="lp-feature-icon"><i class="bi bi-kanban"></i></span>
                 <h3>Kanban Panosu</h3>
-                <p>Görevlerini sürükle-bırak ile sütunlar arasında taşı. Durum güncellemeleri anlık kaydedilir.</p>
-            </div>
-            <div class="feature-card">
-                <span class="feature-icon">⚡</span>
-                <h3>Öncelik Sistemi</h3>
-                <p>Düşük, Orta ve Yüksek öncelik seviyeleriyle en kritik işe odaklan, dikkatini dağıtma.</p>
-            </div>
-            <div class="feature-card">
-                <span class="feature-icon">📅</span>
+                <p>Görevlerini sürükle-bırak ile yapılacak, devam ve bitti sütunlarına taşı.</p>
+            </article>
+            <article class="lp-feature">
+                <span class="lp-feature-icon"><i class="bi bi-lightning-charge"></i></span>
+                <h3>Öncelik Seviyesi</h3>
+                <p>Düşük, orta veya yüksek — kritik işlere odaklan, gerisini geciktir.</p>
+            </article>
+            <article class="lp-feature">
+                <span class="lp-feature-icon"><i class="bi bi-calendar-event"></i></span>
                 <h3>Son Tarih Takibi</h3>
-                <p>Her plan için teslim tarihi belirle. Deadline'larını kaçırmadan projelerini zamanında bitir.</p>
-            </div>
-            <div class="feature-card">
-                <span class="feature-icon">🏷️</span>
-                <h3>Kategori Yönetimi</h3>
-                <p>Planlarını anlamlı kategorilere gruplandır. İş, kişisel, eğitim — her şey düzenli.</p>
-            </div>
+                <p>Her plan için teslim tarihi belirle, deadline'ları kaçırma.</p>
+            </article>
+            <article class="lp-feature">
+                <span class="lp-feature-icon"><i class="bi bi-tags"></i></span>
+                <h3>Kategoriler</h3>
+                <p>Planlarını anlamlı kategorilere ayır — iş, kişisel, eğitim, vs.</p>
+            </article>
         </div>
-    </div>
+    </section>
+
+    <section class="lp-cta-strip">
+        <h2>Hadi başlayalım</h2>
+        <p>Tek tıkla hesap oluştur, planlarını organize etmeye başla.</p>
+        <a asp-area="Identity" asp-page="/Account/Register" class="btn-pi btn-lg-pi">
+            Ücretsiz Hesap Oluştur<i class="bi bi-arrow-right"></i>
+        </a>
+    </section>
 }
